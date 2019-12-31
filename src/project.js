@@ -661,8 +661,31 @@ require = function n(c, a, h) {
                 addImg: cc.Node
             },
             onLoad: function() {
+				this.autoAdapteScreen();
+				
                 this.score = 1, this.isGameOver = !1, this.soundOnTexture = cc.textureCache.addImage(cc.url.raw("resources/image1/on.png")), this.soundOffTexture = cc.textureCache.addImage(cc.url.raw("resources/image1/off.png")), this.soundOnIcon = cc.textureCache.addImage(cc.url.raw("resources/image1/icon_volume_on.png")), this.soundOffIcon = cc.textureCache.addImage(cc.url.raw("resources/image1/icon_volume_off.png"))
             },
+			autoAdapteScreen:function(){
+				// 适配解决方案
+				let _canvas = cc.Canvas.instance;
+			// 设计分辨率比
+				let _rateR = _canvas.designResolution.height/_canvas.designResolution.width;
+			// 显示分辨率比
+				let _rateV = cc.winSize.height/cc.winSize.width;
+				console.log("winSize: rateR: "+_rateR+" rateV: "+_rateV);
+				if (_rateV > _rateR)
+				{
+					_canvas.fitHeight = false;
+					_canvas.fitWidth = true;
+					console.log("winSize: fitWidth");
+				}
+				else
+				{
+					_canvas.fitHeight = true;
+					_canvas.fitWidth = false;
+					console.log("winSize: fitHeight");
+				}
+			},
             check_fit: function() {
                 var t = 0,
                     e = [],
@@ -904,7 +927,15 @@ require = function n(c, a, h) {
                         callback: this.showVideoSuccess,
                         target: this
                     }, this.node.dispatchEvent(t)
-                }, this)
+                }, this);
+				
+				//修改
+				var topNode = cc.find("topNode", this.node);
+				topNode.scaleX = 1;
+				topNode.scaleY = 1;
+
+				
+				console.log(this.node);
             },
             onGoNextEvent: function() {
                 this.shine.destroy(), s.setMaxScore(this.score);
@@ -1463,6 +1494,7 @@ require = function n(c, a, h) {
                 leftViewNode: cc.Node
             },
             onLoad: function() {
+				this.autoAdapteScreen();
                 cc.sys.platform == cc.sys.WECHAT_GAME && (wx.showShareMenu({
                     withShareTicket: !0
                 }), wx.onShareAppMessage(function() {
@@ -1472,6 +1504,27 @@ require = function n(c, a, h) {
                     }
                 }))
             },
+			autoAdapteScreen:function(){
+				// 适配解决方案
+				let _canvas = cc.Canvas.instance;
+			// 设计分辨率比
+				let _rateR = _canvas.designResolution.height/_canvas.designResolution.width;
+			// 显示分辨率比
+				let _rateV = cc.winSize.height/cc.winSize.width;
+				console.log("winSize: rateR: "+_rateR+" rateV: "+_rateV);
+				if (_rateV > _rateR)
+				{
+					_canvas.fitHeight = false;
+					_canvas.fitWidth = true;
+					console.log("winSize: fitWidth");
+				}
+				else
+				{
+					_canvas.fitHeight = true;
+					_canvas.fitWidth = false;
+					console.log("winSize: fitHeight");
+				}
+			},
             start: function() {
                 this.gameStorageCheck("maxScore", 1), this.gameStorageCheck("hintScore", 0), this.gameStorageCheck("isSound", "on"), this.gameStorageCheck("isseSound", "on"), this.node.on("gameStart", function() {
                     this.setViewShow(!1), this.gameNode.active = !0, this.leftViewNode.active = !0, this.gameNode.getComponent("game").init()
